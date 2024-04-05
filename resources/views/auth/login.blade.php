@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="{{ asset('') }}assets/css/app.css" rel="stylesheet">
     <link href="{{ asset('') }}assets/css/icons.css" rel="stylesheet">
-    <title>{{ env('APP_NAME', 'PBL IK-TI') }}</title>
+    <title>{{ env('SITAMA', 'SITAMA') }}</title>
 </head>
 
 <body class="">
@@ -43,10 +43,10 @@
                             <div class="card-body p-sm-5">
                                 <div class="">
                                     <div class="mb-3 text-center">
-                                        {{-- <img src="assets/images/logo-icon.png" width="60" alt=""> --}}
+                                        {{-- <img src="{{ asset('') }}dist/img/logo-polines.png" width="60" alt=""> --}}
                                     </div>
                                     <div class="text-center mb-4">
-                                        <h3 class="">{{ env('APP_NAME', 'PBL IK-TI') }}</h3>
+                                        <h3 class="">{{ env('SITAMA', 'SITAMA') }}</h3>
                                         <p class="mb-0"></p>
                                     </div>
                                     <div class="form-body">

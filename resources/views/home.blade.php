@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h4 class="m-0">Selamat datang {{ ucwords(auth()->user()->name) }}</h4>
+                    <h4 class="m-0">Selamat Datang {{ ucwords(auth()->user()->name) }}</h4>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -20,10 +20,11 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h5 class="m-0">Judul Section</h5>
+                            <h5 class="m-0">SELAMAT DATANG DI DASHBOARD SITAMA</h5>
+            
                         </div>
                         <div class="card-body">
-                            Silakan tambahkan konten aplikasi disini.
+                            Sistem Informasi Tugas Akhir Mahasiswa
                         </div>
                     </div>
                 </div>

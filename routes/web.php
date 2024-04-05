@@ -6,6 +6,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MasterDosenController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,11 +31,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('profil', ProfilController::class)->except('destroy');
-
 Route::resource('manage-user', UserController::class);
 Route::resource('manage-role', RoleController::class);
 Route::resource('manage-menu', MenuController::class);
 Route::resource('manage-permission', PermissionController::class)->only('store', 'destroy');
-
-
+Route::resource('dosen-master', MasterDosenController::class)->names([
+    'index' => 'dosen-master.index',
+    'create' => 'dosen-master.create',
+    'edit' => 'dosen-master.edit',
+    'update' => 'dosen-master.update',
+    'store' => 'dosen-master.store',
+]);
 Route::get('dbbackup', [DBBackupController::class, 'DBDataBackup']);
