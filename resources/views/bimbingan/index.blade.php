@@ -33,20 +33,15 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="form-inline mb-3">
-                            <form action="{{ route('bimbingan.index') }}" method="GET">
-                                <div class="input-group input-group-sm">
-                                </div>
-                            </form>
-                        </div>
                         <table id="datatable-main" class="table table-bordered table-striped text-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">NIM</th>
                                     <th scope="col">Mahasiswa</th>
-                                    <th scope="col">Pembimbing</th>
+                                    <th scope="col">Nama Pembimbing</th>
                                     <th scope="col">Judul TA</th>
+                                    <th scope="col">TA</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -55,11 +50,12 @@
                                 @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->mhs_nim }}</td>
-                                    <td>{{ $item->mhs_nama }}</td>
+                                    <td>{{ $item->mhs_nim }}</td> 
+                                    <td>{{ $item->mhs_nama }}</td> 
                                     <td>{{ $item->mhs_nama }}</td>
                                     <td>{{ $item->ta_judul }}</td>
-                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified === 1 ? 'Verified' : ($item->verified === 0 ? 'Not Verified' : 'Pending') }}</td>
+                                    <td>{{ $item->tahun_akademik }}</td>
+                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified == 1 ? 'Verified' : ($item->verified == 0 ? 'Not Verified' : 'Pending') }}</td>
                                     <td>
                                         <button type="button" class="btn btn-block btn-sm btn-outline-info" data-toggle="dropdown">
                                             <i class="fas fa-cog"></i>
@@ -90,21 +86,6 @@
 </div>
 
 <!-- Tambahkan skrip JavaScript -->
-@push('js')
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
 <script>
     $(document).ready(function() {
         $('.btn-verify').click(function(e) {
