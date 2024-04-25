@@ -33,7 +33,7 @@ Auth::routes();
 Route::post('/bimbingan/verify', 'BimbinganController@verify');
 Route::put('/bimbingan/verify', 'BimbinganController@verify')->name('bimbingan.verify');
 Route::get('/bimbingan/create', 'BimbinganController@create')->name('bimbingan.create');
-
+Route::get('/bimbingan/destroy', 'BimbinganController@destroy')->name('bimbingan.destroy');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan');
 Route::get('/ta', [TaController::class, 'index'])->name('ta');
