@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
-
 class BimbinganController extends Controller
 {
     function __construct()
@@ -28,10 +27,11 @@ class BimbinganController extends Controller
 
         // Mengambil daftar nama dosen
         $dosen = Dosen::pluck('dosen_nama', 'dosen_nip');
-        $ta_mahasiswa = Bimbingan::ta_mahasiswa();
+        $ta_mahasiswa = Bimbingan::ta_mahasiswa(); // Menggunakan method ta_mahasiswa dari model Bimbingan
 
         return view('bimbingan.index', compact('bimbingans', 'dosen', 'ta_mahasiswa', 'tas'));
     }
+
 
     public function create()
     {
@@ -45,9 +45,9 @@ class BimbinganController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'mhs_nim' => 'required|string',
-            'mahasiswa' => 'required|string',
-            'pembimbing_1' => 'required|string',
-            'pembimbing_2' => 'required|string',
+            'mhs_nama' => 'required|string',
+            'dosen_nama' => 'required|string',
+            'dosen_nama' => 'required|string',
             'ta_judul' => 'required|string',
             'verified' => 'nullable|string',
         ]);
@@ -60,11 +60,11 @@ class BimbinganController extends Controller
         }
 
         try {
-            Bimbingan::create([
-                'nim' => $request->nim,
-                'mahasiswa' => $request->mahasiswa,
-                'pembimbing_1' => $request->pembimbing_1,
-                'pembimbing_2' => $request->pembimbing_2,
+            Bimbingan::insert([
+                'mhs_nim' => $request->mhs_nim,
+                'mhs_nama' => $request->mhs_nama,
+                'dosen_nama' => $request->dosen_nama,
+                'dosen_nama' => $request->dosen_nama,
                 'ta_judul' => $request->ta_judul,
                 'verified' => $request->verified ? now() : null
             ]);
@@ -77,19 +77,21 @@ class BimbinganController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($ta_id)
     {
-        $bimbingan = Bimbingan::findOrFail($id);
-        return view('bimbingan.edit', compact('bimbingan'));
+        $ta_mahasiswa = Bimbingan::findOrFail($ta_id);
+        $dosen = Dosen::all();
+        return view('bimbingan.edit', compact('ta_mahasiswa', 'dosen'));
     }
 
-    public function update(Request $request, $id)
+
+    public function update(Request $request, $ta_id)
     {
         $validator = Validator::make($request->all(), [
-            'nim' => 'required|string',
-            'mahasiswa' => 'required|string',
-            'pembimbing_1' => 'required|string',
-            'pembimbing_2' => 'required|string',
+            'mhs_nim' => 'required|string',
+            'mhs_nama' => 'required|string',
+            'dosen_nama' => 'required|string',
+            'dosen_nama' => 'required|string',
             'ta_judul' => 'required|string',
             'verified' => 'nullable|string',
         ]);
@@ -102,12 +104,21 @@ class BimbinganController extends Controller
         }
 
         try {
-            $bimbingan = Bimbingan::findOrFail($id);
+            $bimbingan = Bimbingan::findOrFail($ta_id);
             $bimbingan->update([
+<<<<<<< HEAD
                 // ...
                 'verified' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
+=======
+                'mhs_nim' => $request->mhs_nim,
+                'mhs_nama' => $request->mhs_nama,
+                'dosen_nama' => $request->dosen_nama,
+                'dosen_nama' => $request->dosen_nama,
+                'ta_judul' => $request->ta_judul,
+                'verified_by' => $request->verified ? now() : null
+>>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
             ]);
-    
+
             toastr()->success('Data bimbingan berhasil disimpan');
             return redirect()->route('bimbingan.index');
         } catch (\Throwable $th) {
@@ -116,10 +127,10 @@ class BimbinganController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($ta_id)
     {
         try {
-            $bimbingan = Bimbingan::findOrFail($id);
+            $bimbingan = Bimbingan::findOrFail($ta_id);
             $bimbingan->delete();
             toastr()->success('Data Bimbingan berhasil dihapus.');
             return redirect()->route('bimbingan.index');
@@ -142,5 +153,4 @@ class BimbinganController extends Controller
             return response()->json(['success' => false]);
         }
     }
-
 }

@@ -27,35 +27,42 @@
                             <a href="{{ route('bimbingan.index') }}" class="btn btn-tool"><i class="fas fa-arrow-left"></i></a>
                         </div>
                     </div>
-                    <form action="{{ route('bimbingan.update', $bimbingan->id) }}" method="post">
+                    <form action="{{ route('bimbingan.update', $ta_mahasiswa->ta_id) }}" method="post">
                         @csrf
                         @method('PUT')
                         <div class="card-body">
                             <div class="form-group">
                                 <label>NIM</label>
-                                <input type="text" name="nim" class="form-control" value="{{ $bimbingan->nim }}">
+                                <input type="text" name="nim" class="form-control" value="{{ $ta_mahasiswa->mhs_nim }}">
                             </div>
                             <div class="form-group">
                                 <label>Mahasiswa</label>
-                                <input type="text" name="mahasiswa" class="form-control" value="{{ $bimbingan->mahasiswa }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Dosen Pembimbing 1</label>
-                                <input type="text" name="pembimbing_1" class="form-control" value="{{ $bimbingan->pembimbing_1 }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Dosen Pembimbing 2</label>
-                                <input type="text" name="pembimbing_2" class="form-control" value="{{ $bimbingan->pembimbing_2 }}">
+                                <input type="text" name="mahasiswa" class="form-control" value="{{ $ta_mahasiswa->mhs_nama }}">
                             </div>
                             <div class="form-group">
                                 <label>Judul TA</label>
-                                <input type="text" name="ta_judul" class="form-control" value="{{ $bimbingan->ta_judul }}">
+                                <input type="text" name="ta_judul" class="form-control" value="{{ $ta_mahasiswa->judul_ta }}">
+                            </div>
+                            <!-- Assuming you have a 'Dosen' model for pembimbing 1 and 2 -->
+                            <div class="form-group">
+                                <label>Dosen Pembimbing 1</label>
+                                <select name="pembimbing_1" class="form-control">
+                                    @foreach($dosen as $pembimbing)
+                                    <option value="{{ $pembimbing->dosen_nip }}" {{ $ta_mahasiswa->pembimbing_1 == $pembimbing->dosen_nip ? 'selected' : '' }}>
+                                        {{ $pembimbing->dosen_nama }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Status</label>
-                                <div class="input-group">
-                                    <input type="checkbox" name="verified" data-bootstrap-switch data-off-color="danger" data-on-color="success" {{ $bimbingan->bimbingan_verified_at ? 'checked' : '' }}>
-                                </div>
+                                <label>Dosen Pembimbing 2</label>
+                                <select name="pembimbing_2" class="form-control">
+                                    @foreach($dosen as $pembimbing)
+                                    <option value="{{ $pembimbing->dosen_nip }}" {{ $ta_mahasiswa->pembimbing_2 == $pembimbing->dosen_nip ? 'selected' : '' }}>
+                                        {{ $pembimbing->dosen_nama }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="card-footer">

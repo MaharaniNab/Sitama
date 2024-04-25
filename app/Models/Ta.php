@@ -9,6 +9,7 @@ class Ta extends Model
 {
     protected $table = 'tas';
 
+<<<<<<< HEAD
     // Relationship with Mahasiswa model
     public function mahasiswa()
     {
@@ -31,5 +32,16 @@ class Ta extends Model
             ->get();
 
         return $taSidang;
+=======
+
+    public static function ta_mahasiswa()
+    {
+        $ta_mahasiswa = DB::table('tas')
+            ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
+            ->select('tas.*', 'mahasiswa.mhs_nim', 'mahasiswa.mhs_nama')
+            ->orderBy('mahasiswa.mhs_nim', 'asc')
+            ->get();
+        return $ta_mahasiswa;
+>>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
     }
 }

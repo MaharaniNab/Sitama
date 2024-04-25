@@ -54,10 +54,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($taSidang as $item)
+                                @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->mhs_nama }}</td> 
+<<<<<<< HEAD
                                     <td>{{ $item->sesi_waktu_mulai }} - {{ $item->sesi_waktu_selesai }}</td>
                                     <td>{{ $item->ruangan_nama }}</td>
                                     <td>
@@ -69,6 +70,8 @@
                                             }
                                         @endphp
                                     </td>
+=======
+>>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
                                     <td></td>
                                     <td></td>
                                     <td></td>

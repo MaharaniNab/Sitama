@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ta;
 use App\Models\Dosen;
 use App\Models\Mahasiswa;
+use App\Models\Bimbingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,13 +15,13 @@ class TaController extends Controller
     {
         // Mengambil data dari tabel ta_sidang beserta relasi dengan mahasiswa dan jadwalSidang
         $mahasiswa = Mahasiswa::all(); // Mengambil data mahasiswa dari database atau sumber lainnya
-        $taSidang = Ta::TaSidang();
+        $ta_mahasiswa = Bimbingan::ta_mahasiswa();
         // var_dump($ta_mahasiswa);
         // Mengambil daftar nama dosen
         $dosen = Dosen::pluck('dosen_nama', 'dosen_nip');
 
         // Mengirim data ke tampilan
-        return view('ta.index', compact('taSidang', 'dosen', 'mahasiswa'));
+        return view('ta.index', compact('ta_mahasiswa', 'dosen', 'mahasiswa'));
     }
 
     
