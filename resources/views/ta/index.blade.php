@@ -46,27 +46,34 @@
                                     <th scope="col">Waktu</th>
                                     <th scope="col">Tempat</th>
                                     <th scope="col">Dosen Pembimbing</th>
-                                    <th scope="col">Penguji</th>
+                                    <th scope="col">Dosen Penguji</th>
                                     <th scope="col">Nilai Dosen Pembimbing</th>
                                     <th scope="col">Nilai Dosen Penguji</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($taSidang as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->nama_id }}</td> 
+                                    <td>{{ $item->mhs_nama }}</td> 
+                                    <td>{{ $item->sesi_waktu_mulai }} - {{ $item->sesi_waktu_selesai }}</td>
+                                    <td>{{ $item->ruangan_nama }}</td>
+                                    <td>
+                                        @php
+                                            $pembimbing = \App\Models\Bimbingan::where('ta_id', $item->ta_id)->orderBy('urutan')->get();
+                                            foreach ($pembimbing as $pem) {
+                                                $dosen = \App\Models\Dosen::where('dosen_nip', $pem->dosen_nip)->first();
+                                                echo $dosen->dosen_nama . "<br>";
+                                            }
+                                        @endphp
+                                    </td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
-
-
-                                    
                                 </tr>
                                 @endforeach
                             </tbody>
