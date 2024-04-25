@@ -66,7 +66,7 @@ class BimbinganController extends Controller
                 'pembimbing_1' => $request->pembimbing_1,
                 'pembimbing_2' => $request->pembimbing_2,
                 'ta_judul' => $request->ta_judul,
-                'verified_by' => $request->verified ? now() : null
+                'verified' => $request->verified ? now() : null
             ]);
 
             toastr()->success('Data Bimbingan berhasil ditambahkan.');
@@ -105,7 +105,7 @@ class BimbinganController extends Controller
             $bimbingan = Bimbingan::findOrFail($id);
             $bimbingan->update([
                 // ...
-                'verifikasi' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
+                'verified' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
             ]);
     
             toastr()->success('Data bimbingan berhasil disimpan');
