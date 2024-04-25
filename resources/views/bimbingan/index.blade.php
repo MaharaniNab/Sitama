@@ -33,20 +33,15 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="form-inline mb-3">
-                            <form action="{{ route('bimbingan.index') }}" method="GET">
-                                <div class="input-group input-group-sm">
-                                </div>
-                            </form>
-                        </div>
                         <table id="datatable-main" class="table table-bordered table-striped text-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">NIM</th>
                                     <th scope="col">Mahasiswa</th>
-                                    <th scope="col">Pembimbing</th>
+                                    <th scope="col">Nama Pembimbing</th>
                                     <th scope="col">Judul TA</th>
+                                    <th scope="col">TA</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -57,9 +52,10 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->mhs_nim }}</td> 
                                     <td>{{ $item->mhs_nama }}</td> 
-                                    <td>{{ $item->mhs_nama }}</td>
+                                    <td>{{ $item->nama_pembimbing }}</td>
                                     <td>{{ $item->ta_judul }}</td>
-                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified === 1 ? 'Verified' : ($item->verified === 0 ? 'Not Verified' : 'Pending') }}</td>
+                                    <td>{{ $item->tahun_akademik }}</td>
+                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified == 1 ? 'Verified' : ($item->verified == 0 ? 'Not Verified' : 'Pending') }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -84,6 +80,7 @@
 </div>
 
 <!-- Tambahkan skrip JavaScript -->
+@push('scripts')
 <script>
     $(document).ready(function() {
         $('.btn-verify').click(function(e) {
@@ -112,4 +109,5 @@
         });
     });
 </script>
+@endpush
 @endsection
