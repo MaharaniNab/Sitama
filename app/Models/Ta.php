@@ -11,19 +11,14 @@ class Ta extends Model
 {
     protected $table = 'tas';
 
-    // Di dalam model Ta
-    public function mahasiswa()
-    {
-        return $this->belongsTo(Mahasiswa::class, 'mhs_nim');
-    }
 
-    public static function TaSidang()
+    public static function ta_mahasiswa()
     {
-        $taSidang = DB::table('tas')
+        $ta_mahasiswa = DB::table('tas')
             ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
-            ->select('tas.*', 'mahasiswa.mhs_nim', 'mahasiswa.nama_id')
+            ->select('tas.*', 'mahasiswa.mhs_nim', 'mahasiswa.mhs_nama')
             ->orderBy('mahasiswa.mhs_nim', 'asc')
             ->get();
-        return $taSidang;
+        return $ta_mahasiswa;
     }
 }

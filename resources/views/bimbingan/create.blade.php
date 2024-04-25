@@ -35,7 +35,7 @@
                                 <label>Mahasiswa</label>
                                 <select name="mahasiswa" class="form-control">
                                     @foreach($ta_mahasiswa as $item)
-                                    <option value="{{ $item->mhs_nim }}">{{ $item->nama_id }}</option>
+                                    <option value="{{ $item->mhs_nim }}">{{ $item->mhs_nama }}</option>
                                     @endforeach
                                 </select>
                             </div>

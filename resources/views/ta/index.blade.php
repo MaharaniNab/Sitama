@@ -53,10 +53,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($taSidang as $item)
+                                @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->nama_id }}</td> 
+                                    <td>{{ $item->mhs_nama }}</td> 
                                     <td></td>
                                     <td></td>
                                     <td></td>

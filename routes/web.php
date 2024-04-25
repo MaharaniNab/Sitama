@@ -11,6 +11,7 @@ use App\Http\Controllers\TaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +34,7 @@ Auth::routes();
 Route::post('/bimbingan/verify', 'BimbinganController@verify');
 Route::put('/bimbingan/verify', 'BimbinganController@verify')->name('bimbingan.verify');
 Route::get('/bimbingan/create', 'BimbinganController@create')->name('bimbingan.create');
+Route::get('/bimbingan/edit', 'BimbinganController@edit')->name('bimbingan.edit');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan');

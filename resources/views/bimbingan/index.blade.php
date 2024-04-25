@@ -52,29 +52,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($ta_mahasiswa as $item)
+                                @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->mhs_nim }}</td> 
-                                    <td>{{ $item->mhs_nama }}</td> 
+                                    <td>{{ $item->mhs_nim }}</td>
+                                    <td>{{ $item->mhs_nama }}</td>
                                     <td>{{ $item->mhs_nama }}</td>
                                     <td>{{ $item->ta_judul }}</td>
                                     <td id="status-{{ $item->ta_id }}">{{ $item->verified === 1 ? 'Verified' : ($item->verified === 0 ? 'Not Verified' : 'Pending') }}</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
-                                                <a class="dropdown-item btn-verify" href="#" data-id="{{ $item->ta_id }}">Verifikasi</a>
-                                            </div>
+                                        <button type="button" class="btn btn-block btn-sm btn-outline-info" data-toggle="dropdown">
+                                            <i class="fas fa-cog"></i>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a class="dropdown-item" href="{{ route('bimbingan.edit', $item->ta_id) }}">Edit</a>
+                                            <form method="POST" action="{{ route('bimbingan.destroy', $item->ta_id) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a class="dropdown-item confirm-button" href="#">Hapus</a>
+                                            </form>
+                                            <div class="dropdown-divider"></div>
+                                            <!-- Tambah Permission -->
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-default{{ $item->ta_id }}" href="#">Verifikasi Data</a>
                                         </div>
                                     </td>
+
                                 </tr>
-                            @endforeach
+                                @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -84,6 +90,21 @@
 </div>
 
 <!-- Tambahkan skrip JavaScript -->
+@push('js')
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         $('.btn-verify').click(function(e) {
@@ -91,25 +112,39 @@
             var id = $(this).data('id');
             var isVerified = confirm("Apakah Anda yakin ingin memverifikasi data ini?");
             if (isVerified) {
-                // Kirim permintaan AJAX untuk memperbarui status
+                // Kirim permintaan AJAX untuk memverifikasi status
                 $.ajax({
                     url: '/bimbingan/' + id + '/verify',
                     method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {
-                        _token: '{{ csrf_token() }}',
-                        verified: true
+                        _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         // Perbarui tampilan status di tabel
                         $('#status-' + id).text('Verified');
                         toastr.success('Data berhasil diverifikasi.');
                     },
-                    error: function(xhr, status, error) {
-                        toastr.error('Gagal memverifikasi data.');
+                    error: function(xhr) {
+                        toastr.error('Terjadi kesalahan! Silakan coba lagi nanti.');
                     }
                 });
+
             }
         });
+
+        // Periksa apakah DataTable sudah diinisialisasi sebelumnya sebelum mencoba menginisialisasinya kembali
+        if (!$.fn.DataTable.isDataTable('#datatable-main')) {
+            $('#datatable-main').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#datatable-main_wrapper .col-md-6:eq(0)');
+        }
     });
 </script>
+@endpush
 @endsection

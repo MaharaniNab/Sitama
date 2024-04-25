@@ -11,6 +11,7 @@ class Bimbingan extends Model
     use HasFactory;
 
     protected $table = 'bimbingans'; // Nama tabel jika tidak mengikuti konvensi Laravel
+    protected $primaryKey = 'ta_id';
 
     // Definisi relasi dengan model Mahasiswa
     public static function ta_mahasiswa()
