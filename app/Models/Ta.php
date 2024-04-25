@@ -9,7 +9,6 @@ class Ta extends Model
 {
     protected $table = 'tas';
 
-<<<<<<< HEAD
     // Relationship with Mahasiswa model
     public function mahasiswa()
     {
@@ -27,21 +26,10 @@ class Ta extends Model
             ->join('bimbingans', 'tas.ta_id', '=', 'bimbingans.ta_id')
             ->join('dosen', 'bimbingans.dosen_nip', '=', 'dosen.dosen_nip')
             ->join('mahasiswa', 'tas.mhs_nim', '=', 'mahasiswa.mhs_nim')
-            ->select('ta_sidang.*', 'mahasiswa.mhs_nama', 'sesi_ta.sesi_waktu_mulai', 'sesi_ta.sesi_waktu_selesai', 'ruangan_ta.ruangan_nama', 'dosen.dosen_nama')
+            ->select('ta_sidang.*', 'tas.mhs_nim', 'mahasiswa.mhs_nama', 'sesi_ta.sesi_waktu_mulai', 'sesi_ta.sesi_waktu_selesai', 'ruangan_ta.ruangan_nama', 'dosen.dosen_nama')
             ->orderBy('mahasiswa.mhs_nim', 'asc')
             ->get();
 
         return $taSidang;
-=======
-
-    public static function ta_mahasiswa()
-    {
-        $ta_mahasiswa = DB::table('tas')
-            ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
-            ->select('tas.*', 'mahasiswa.mhs_nim', 'mahasiswa.mhs_nama')
-            ->orderBy('mahasiswa.mhs_nim', 'asc')
-            ->get();
-        return $ta_mahasiswa;
->>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
     }
 }

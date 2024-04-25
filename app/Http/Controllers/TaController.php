@@ -16,12 +16,14 @@ class TaController extends Controller
         // Mengambil data dari tabel ta_sidang beserta relasi dengan mahasiswa dan jadwalSidang
         $mahasiswa = Mahasiswa::all(); // Mengambil data mahasiswa dari database atau sumber lainnya
         $ta_mahasiswa = Bimbingan::ta_mahasiswa();
-        // var_dump($ta_mahasiswa);
+        
+    $taSidang = Ta::TaSidang(); // Mengambil data ta_sidang
+// var_dump($ta_mahasiswa);
         // Mengambil daftar nama dosen
         $dosen = Dosen::pluck('dosen_nama', 'dosen_nip');
 
         // Mengirim data ke tampilan
-        return view('ta.index', compact('ta_mahasiswa', 'dosen', 'mahasiswa'));
+        return view('ta.index', compact('ta_mahasiswa', 'taSidang', 'dosen', 'mahasiswa'));
     }
 
     
