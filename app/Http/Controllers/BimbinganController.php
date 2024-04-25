@@ -106,17 +106,12 @@ class BimbinganController extends Controller
         try {
             $bimbingan = Bimbingan::findOrFail($ta_id);
             $bimbingan->update([
-<<<<<<< HEAD
-                // ...
-                'verified' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
-=======
                 'mhs_nim' => $request->mhs_nim,
                 'mhs_nama' => $request->mhs_nama,
                 'dosen_nama' => $request->dosen_nama,
                 'dosen_nama' => $request->dosen_nama,
                 'ta_judul' => $request->ta_judul,
-                'verified_by' => $request->verified ? now() : null
->>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
+                'verified' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
             ]);
 
             toastr()->success('Data bimbingan berhasil disimpan');

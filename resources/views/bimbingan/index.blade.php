@@ -57,22 +57,6 @@
                                     <td>{{ $item->tahun_akademik }}</td>
                                     <td id="status-{{ $item->ta_id }}">{{ $item->verified == 1 ? 'Verified' : ($item->verified == 0 ? 'Not Verified' : 'Pending') }}</td>
                                     <td>
-<<<<<<< HEAD
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <div class="dropdown-divider"></div>
-                                                <form method="POST" action="{{ route('bimbingan.destroy', $item->ta_id) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <a class="dropdown-item confirm-button" href="#">Hapus</a>
-                                                </form>
-                                                <a class="dropdown-item btn-verify" href="#" data-id="{{ $item->ta_id }}">Verifikasi</a>
-                                            </div>
-=======
                                         <button type="button" class="btn btn-block btn-sm btn-outline-info" data-toggle="dropdown">
                                             <i class="fas fa-cog"></i>
                                         </button>
@@ -86,7 +70,6 @@
                                             <div class="dropdown-divider"></div>
                                             <!-- Tambah Permission -->
                                             <a class="dropdown-item" data-toggle="modal" data-target="#modal-default{{ $item->ta_id }}" href="#">Verifikasi Data</a>
->>>>>>> 8e1ad3f2c928228a094b6db0c0b8f1a61ab0226b
                                         </div>
                                     </td>
 
