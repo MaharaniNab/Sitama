@@ -52,7 +52,15 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->mhs_nim }}</td> 
                                     <td>{{ $item->mhs_nama }}</td> 
-                                    <td>{{ $item->mhs_nama }}</td>
+                                    <td>
+                                        @php
+                                            $pembimbing = \App\Models\Bimbingan::where('ta_id', $item->ta_id)->orderBy('urutan')->get();
+                                            foreach ($pembimbing as $pem) {
+                                                $dosen = \App\Models\Dosen::where('dosen_nip', $pem->dosen_nip)->first();
+                                                echo $dosen->dosen_nama . "<br>";
+                                            }
+                                        @endphp
+                                    </td>
                                     <td>{{ $item->ta_judul }}</td>
                                     <td>{{ $item->tahun_akademik }}</td>
                                     <td id="status-{{ $item->ta_id }}">{{ $item->verified == 1 ? 'Verified' : ($item->verified == 0 ? 'Not Verified' : 'Pending') }}</td>
