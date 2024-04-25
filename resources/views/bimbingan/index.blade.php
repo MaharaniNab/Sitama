@@ -63,7 +63,12 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
+                                                <div class="dropdown-divider"></div>
+                                                <form method="POST" action="{{ route('bimbingan.destroy', $item->ta_id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <a class="dropdown-item confirm-button" href="#">Hapus</a>
+                                                </form>
                                                 <a class="dropdown-item btn-verify" href="#" data-id="{{ $item->ta_id }}">Verifikasi</a>
                                             </div>
                                         </div>
