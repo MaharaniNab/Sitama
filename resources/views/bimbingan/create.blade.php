@@ -32,12 +32,16 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Mahasiswa</label>
-                                <select name="mahasiswa" class="form-control">
-                                    @foreach($ta_mahasiswa as $item)
-                                    <option value="{{ $item->mhs_nim }}">{{ $item->mhs_nama }}</option>
-                                    @endforeach
-                                </select>
+                                <label>NIM Mahasiswa</label>
+                                <input type="text" name="mhs_nim" class="form-control" placeholder="NIM Mahasiswa" value="{{ old('mhs_nim') }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Mahasiswa</label>
+                                <input type="text" name="mhs_nama" class="form-control" placeholder="Nama Mahasiswa" value="{{ old('mhs_nama') }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Judul Tugas Akhir</label>
+                                <input type="text" name="ta_judul" class="form-control" placeholder="Judul Tugas Akhir" value="{{ old('ta_judul') }}">
                             </div>
                             <div class="form-group">
                                 <label>Dosen Pembimbing 1</label>
@@ -65,15 +69,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Judul Tugas Akhir</label>
-                                <select name="ta_judul" class="form-control">
-                                    <option value="">Pilih Judul TA</option>
-                                    @foreach($tas as $ta)
-                                    <option value="{{ $ta->ta_judul }}">{{ $ta->ta_judul }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label>Status</label>
                                 <div class="input-group">
                                     <input type="checkbox" name="verified" data-bootstrap-switch data-off-color="danger" data-on-color="success">
@@ -92,7 +87,8 @@
 @endsection
 
 @push('js')
+<!-- Tambahkan script JS jika diperlukan -->
 <script>
-    // tambahkan script JS jika diperlukan
+    // Script tambahan jika diperlukan
 </script>
 @endpush

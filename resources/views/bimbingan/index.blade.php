@@ -50,15 +50,15 @@
                                 @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->mhs_nim }}</td> 
-                                    <td>{{ $item->mhs_nama }}</td> 
+                                    <td>{{ $item->mhs_nim }}</td>
+                                    <td>{{ $item->mhs_nama }}</td>
                                     <td>
                                         @php
-                                            $pembimbing = \App\Models\Bimbingan::where('ta_id', $item->ta_id)->orderBy('urutan')->get();
-                                            foreach ($pembimbing as $pem) {
-                                                $dosen = \App\Models\Dosen::where('dosen_nip', $pem->dosen_nip)->first();
-                                                echo $dosen->dosen_nama . "<br>";
-                                            }
+                                        $pembimbing = \App\Models\Bimbingan::where('ta_id', $item->ta_id)->orderBy('urutan')->get();
+                                        foreach ($pembimbing as $pem) {
+                                        $dosen = \App\Models\Dosen::where('dosen_nip', $pem->dosen_nip)->first();
+                                        echo $dosen->dosen_nama . "<br>";
+                                        }
                                         @endphp
                                     </td>
                                     <td>{{ $item->ta_judul }}</td>
@@ -80,7 +80,6 @@
                                             <a class="dropdown-item" data-toggle="modal" data-target="#modal-default{{ $item->ta_id }}" href="#">Verifikasi Data</a>
                                         </div>
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -36,6 +36,7 @@ Route::put('/bimbingan/verify', 'BimbinganController@verify')->name('bimbingan.v
 Route::get('/bimbingan/create', 'BimbinganController@create')->name('bimbingan.create');
 Route::get('/bimbingan/destroy', 'BimbinganController@destroy')->name('bimbingan.destroy');
 Route::get('/bimbingan/edit', 'BimbinganController@edit')->name('bimbingan.edit');
+Route::post('/bimbingan', [BimbinganController::class, 'store'])->name('bimbingan.store');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan');
