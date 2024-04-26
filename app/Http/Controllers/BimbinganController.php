@@ -76,11 +76,13 @@ class BimbinganController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($ta_id)
     {
-        $bimbingan = Bimbingan::findOrFail($id);
-        return view('bimbingan.edit', compact('bimbingan'));
+        $ta_mahasiswa = Bimbingan::findOrFail($ta_id);
+        $dosen = Dosen::all();
+        return view('bimbingan.edit', compact('ta_mahasiswa', 'dosen'));
     }
+
 
     public function update(Request $request, $id)
     {
@@ -127,7 +129,6 @@ class BimbinganController extends Controller
             return redirect()->route('bimbingan.index');
         }
     }
-git 
     public function verify(Request $request)
     {
         $taId = $request->input('ta_id');

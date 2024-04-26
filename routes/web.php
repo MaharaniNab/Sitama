@@ -11,6 +11,7 @@ use App\Http\Controllers\TaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,6 +37,9 @@ Route::get('/bimbingan/create', 'BimbinganController@create')->name('bimbingan.c
 Route::get('/bimbingan/upload_sk', 'App\Http\Controllers\BimbinganController@show')->name('bimbingan.upload_sk_form');
 
 
+Route::get('/bimbingan/destroy', 'BimbinganController@destroy')->name('bimbingan.destroy');
+Route::get('/bimbingan/edit', 'BimbinganController@edit')->name('bimbingan.edit');
+Route::post('/bimbingan', [BimbinganController::class, 'store'])->name('bimbingan.store');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan');
@@ -48,8 +52,5 @@ Route::resource('manage-menu', MenuController::class);
 Route::resource('manage-permission', PermissionController::class)->only('store', 'destroy');
 Route::resource('bimbingan', BimbinganController::class);
 Route::resource('ta', TaController::class);
-
-
-
 
 Route::get('dbbackup', [DBBackupController::class, 'DBDataBackup']);

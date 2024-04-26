@@ -35,8 +35,7 @@
                                 <label>Mahasiswa</label>
                                 <select name="mahasiswa" class="form-control">
                                     @foreach($ta_mahasiswa as $item)
-                                    <option value=""></option>
-                                    <option value="{{ $item->mhs_nim }}">{{ $item->mhs_nama }}</option>
+                                    <option value="{{ $item->mhs_nim }}">{{ $item->nama_id }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,7 +70,7 @@
                             <div class="form-group">
                                 <label>Judul Tugas Akhir</label>
                                 <select name="ta_judul" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">Pilih Judul TA</option>
                                     @foreach($tas as $ta)
                                     <option value="{{ $ta->ta_judul }}">{{ $ta->ta_judul }}</option>
                                     @endforeach
@@ -96,10 +95,8 @@
 @endsection
 
 @push('js')
+<!-- Tambahkan script JS jika diperlukan -->
 <script>
-    // Reset nilai input saat halaman dimuat
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('formTambahBimbingan').reset();
-    });
+    // tambahkan script JS jika diperlukan
 </script>
 @endpush

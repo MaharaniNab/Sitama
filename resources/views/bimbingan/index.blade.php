@@ -33,50 +33,57 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="form-inline mb-3">
-                            <form action="{{ route('bimbingan.index') }}" method="GET">
-                                <div class="input-group input-group-sm">
-                                </div>
-                            </form>
-                        </div>
                         <table id="datatable-main" class="table table-bordered table-striped text-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">NIM</th>
                                     <th scope="col">Mahasiswa</th>
-                                    <th scope="col">Pembimbing</th>
+                                    <th scope="col">Nama Pembimbing</th>
                                     <th scope="col">Judul TA</th>
+                                    <th scope="col">TA</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($ta_mahasiswa as $item)
+                                @foreach ($ta_mahasiswa as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->mhs_nim }}</td> 
-                                    <td>{{ $item->mhs_nama }}</td> 
+                                    <td>{{ $item->mhs_nim }}</td>
                                     <td>{{ $item->mhs_nama }}</td>
-                                    <td>{{ $item->ta_judul }}</td>
-                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified === 1 ? 'Verified' : ($item->verified === 0 ? 'Not Verified' : 'Pending') }}</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('bimbingan.upload_sk_form') }}">Detail Persyaratan</a>
-                                                <a class="dropdown-item btn-verify" href="#" data-id="{{ $item->ta_id }}">Verifikasi</a>
-                                                <a class="dropdown-item" href="#">Ubah</a>
-                                                <a class="dropdown-item" href="#">Hapus</a>
-                                            </div>
-
+                                        @php
+                                        $pembimbing = \App\Models\Bimbingan::where('ta_id', $item->ta_id)->orderBy('urutan')->get();
+                                        foreach ($pembimbing as $pem) {
+                                        $dosen = \App\Models\Dosen::where('dosen_nip', $pem->dosen_nip)->first();
+                                        echo $dosen->dosen_nama . "<br>";
+                                        }
+                                        @endphp
+                                    </td>
+                                    <td>{{ $item->ta_judul }}</td>
+                                    <td>{{ $item->tahun_akademik }}</td>
+                                    <td id="status-{{ $item->ta_id }}">{{ $item->verified == 1 ? 'Verified' : ($item->verified == 0 ? 'Not Verified' : 'Pending') }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-sm btn-outline-info" data-toggle="dropdown">
+                                            <i class="fas fa-cog"></i>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a class="dropdown-item" href="{{ route('bimbingan.edit', $item->ta_id) }}">Edit</a>
+                                            <form method="POST" action="{{ route('bimbingan.destroy', $item->ta_id) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a class="dropdown-item confirm-button" href="#">Hapus</a>
+                                            </form>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-default{{ $item->ta_id }}" href="#">Verifikasi Data</a>
+                                            <a class="dropdown-item" href="{{ route('bimbingan.upload_sk_form') }}">Detail Persyaratan</a>
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                                @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -93,25 +100,39 @@
             var id = $(this).data('id');
             var isVerified = confirm("Apakah Anda yakin ingin memverifikasi data ini?");
             if (isVerified) {
-                // Kirim permintaan AJAX untuk memperbarui status
+                // Kirim permintaan AJAX untuk memverifikasi status
                 $.ajax({
                     url: '/bimbingan/' + id + '/verify',
                     method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {
-                        _token: '{{ csrf_token() }}',
-                        verified: true
+                        _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         // Perbarui tampilan status di tabel
                         $('#status-' + id).text('Verified');
                         toastr.success('Data berhasil diverifikasi.');
                     },
-                    error: function(xhr, status, error) {
-                        toastr.error('Gagal memverifikasi data.');
+                    error: function(xhr) {
+                        toastr.error('Terjadi kesalahan! Silakan coba lagi nanti.');
                     }
                 });
+
             }
         });
+
+        // Periksa apakah DataTable sudah diinisialisasi sebelumnya sebelum mencoba menginisialisasinya kembali
+        if (!$.fn.DataTable.isDataTable('#datatable-main')) {
+            $('#datatable-main').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#datatable-main_wrapper .col-md-6:eq(0)');
+        }
     });
 </script>
+
 @endsection
