@@ -66,10 +66,12 @@
                                                 <i class="fas fa-cog"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
+                                                <a class="dropdown-item" href="{{ route('bimbingan.upload_sk_form') }}">Detail Persyaratan</a>
                                                 <a class="dropdown-item btn-verify" href="#" data-id="{{ $item->ta_id }}">Verifikasi</a>
+                                                <a class="dropdown-item" href="#">Ubah</a>
+                                                <a class="dropdown-item" href="#">Hapus</a>
                                             </div>
+
                                         </div>
                                     </td>
                                 </tr>

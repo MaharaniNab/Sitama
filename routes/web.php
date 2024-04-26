@@ -33,6 +33,9 @@ Auth::routes();
 Route::post('/bimbingan/verify', 'BimbinganController@verify');
 Route::put('/bimbingan/verify', 'BimbinganController@verify')->name('bimbingan.verify');
 Route::get('/bimbingan/create', 'BimbinganController@create')->name('bimbingan.create');
+Route::get('/bimbingan/upload_sk', 'App\Http\Controllers\BimbinganController@show')->name('bimbingan.upload_sk_form');
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/bimbingan', [BimbinganController::class, 'index'])->name('bimbingan');
@@ -45,6 +48,8 @@ Route::resource('manage-menu', MenuController::class);
 Route::resource('manage-permission', PermissionController::class)->only('store', 'destroy');
 Route::resource('bimbingan', BimbinganController::class);
 Route::resource('ta', TaController::class);
+
+
 
 
 Route::get('dbbackup', [DBBackupController::class, 'DBDataBackup']);

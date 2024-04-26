@@ -22,4 +22,5 @@ class Bimbingan extends Model
             ->get();
         return $ta_mahasiswa;
     }
+    
 }

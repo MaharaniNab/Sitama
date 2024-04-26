@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
-
 class BimbinganController extends Controller
 {
     function __construct()
@@ -128,7 +127,7 @@ class BimbinganController extends Controller
             return redirect()->route('bimbingan.index');
         }
     }
-
+git 
     public function verify(Request $request)
     {
         $taId = $request->input('ta_id');
@@ -143,4 +142,10 @@ class BimbinganController extends Controller
         }
     }
 
+    // Menampilkan form upload SK
+    // Menampilkan form upload SK
+    public function show()
+    {
+        return view('bimbingan.upload_sk');
+    }
 }

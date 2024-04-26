@@ -28,14 +28,15 @@
                             <a href="{{ route('bimbingan.index') }}" class="btn btn-tool"><i class="fas fa-arrow-left"></i></a>
                         </div>
                     </div>
-                    <form action="{{ route('bimbingan.store') }}" method="post">
+                    <form id="formTambahBimbingan" action="{{ route('bimbingan.store') }}" method="post">
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Mahasiswa</label>
                                 <select name="mahasiswa" class="form-control">
                                     @foreach($ta_mahasiswa as $item)
-                                    <option value="{{ $item->mhs_nim }}">{{ $item->nama_id }}</option>
+                                    <option value=""></option>
+                                    <option value="{{ $item->mhs_nim }}">{{ $item->mhs_nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -43,6 +44,7 @@
                                 <label>Dosen Pembimbing 1</label>
                                 <select name="dosen_pembimbing_1" class="form-control">
                                     @foreach($dosen as $pembimbing)
+                                    <option value=""></option>
                                     <option value="{{ $pembimbing->dosen_nip }}">{{ $pembimbing->dosen_nama }}</option>
                                     @endforeach
                                 </select>
@@ -51,6 +53,7 @@
                                 <label>Dosen Pembimbing 2</label>
                                 <select name="dosen_pembimbing_2" class="form-control">
                                     @foreach($dosen as $pembimbing)
+                                    <option value=""></option>
                                     <option value="{{ $pembimbing->dosen_nip }}">{{ $pembimbing->dosen_nama }}</option>
                                     @endforeach
                                 </select>
@@ -58,6 +61,7 @@
                             <div class="form-group">
                                 <label>Tahun Akademik</label>
                                 <select name="tahun_akademik" class="form-control">
+                                <option value=""></option>
                                     <option value="2020-2021">2020-2021</option>
                                     <option value="2021-2022">2021-2022</option>
                                     <option value="2022-2023">2022-2023</option>
@@ -67,7 +71,7 @@
                             <div class="form-group">
                                 <label>Judul Tugas Akhir</label>
                                 <select name="ta_judul" class="form-control">
-                                    <option value="">Pilih Judul TA</option>
+                                    <option value=""></option>
                                     @foreach($tas as $ta)
                                     <option value="{{ $ta->ta_judul }}">{{ $ta->ta_judul }}</option>
                                     @endforeach
@@ -93,6 +97,9 @@
 
 @push('js')
 <script>
-    // tambahkan script JS jika diperlukan
+    // Reset nilai input saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('formTambahBimbingan').reset();
+    });
 </script>
 @endpush
