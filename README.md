@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <p align="center">
 <a href="https://laravel.com"  target="_blank"><img  src="https://ik.polines.ac.id/wp-content/uploads/2023/11/logo-web.png"  width="360"  alt="Laravel Logo"></a> 
@@ -63,3 +64,7 @@ Terima Kasih kepada:
 - Task Force PBL D3 Teknik Informatika & S.Tr. Teknologi Rekayasa Komputer
 <hr>
 Modifikasi dari Project: https://github.com/mjumain/RBAC-LARAVEL-9
+=======
+# Sitama
+Sistem Informasi Tugas Akhir Mahasiswa
+>>>>>>> 080fc2c7e6315133f4796c447af1226cef4b7129
