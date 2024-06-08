@@ -8,10 +8,7 @@ use App\Models\Mahasiswa;
 use App\Models\Ta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
-
-use Throwable;
-
+use Illuminate\Support\Facades\DB;
 
 class BimbinganController extends Controller
 {
@@ -27,8 +24,11 @@ class BimbinganController extends Controller
     {
         $bimbingans = Bimbingan::all();
         $tas = Ta::all();
+
+        // Mengambil daftar nama dosen
         $dosen = Dosen::pluck('dosen_nama', 'dosen_nip');
         $ta_mahasiswa = Bimbingan::ta_mahasiswa();
+        // dd($ta_mahasiswa);
 
         return view('bimbingan.index', compact('bimbingans', 'dosen', 'ta_mahasiswa', 'tas'));
     }
@@ -36,93 +36,17 @@ class BimbinganController extends Controller
     public function create()
     {
         $tas = Ta::all();
-        $dosen = Dosen::all();
         $ta_mahasiswa = Bimbingan::ta_mahasiswa();
-
-        return view('bimbingan.create', compact('tas', 'dosen', 'ta_mahasiswa'));
+        $dosen = Dosen::all();
+        $mhs = Bimbingan::mahasiswa();
+        return view('bimbingan.create', compact('tas', 'ta_mahasiswa', 'dosen', 'mhs'));
     }
 
     public function store(Request $request)
     {
-        try {
-            // Validasi data
-            $validator = Validator::make($request->all(), [
-                'mhs_nim' => 'required|string',
-                'mhs_nama' => 'required|string',
-                'ta_judul' => 'required|string',
-                'dosen_pembimbing_1' => 'required|string',
-                'dosen_pembimbing_2' => 'required|string',
-                'tahun_akademik' => 'required|string',
-            ]);
-
-            if ($validator->fails()) {
-                // Jika validasi gagal, kembalikan pesan error    
-                dd($validator->errors()->all());
-                toastr()->error('Data Bimbingan gagal ditambah. Periksa kembali data Anda.');
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            // Lakukan pengecekan apakah mahasiswa dengan NIM yang diberikan ada dalam database
-            $mahasiswa = Mahasiswa::where('mhs_nim', $request->mhs_nim)->first();
-            if (!$mahasiswa) {
-                // Jika mahasiswa tidak ditemukan, kembalikan pesan error
-                toastr()->error('Mahasiswa dengan NIM tersebut tidak ditemukan.');
-                return redirect()->back()->withInput();
-            }
-
-            // Simpan data TA ke dalam tabel tas
-            $tas = Ta::create([
-                'ta_judul' => $request->ta_judul,
-                'tahun_akademik' => $request->tahun_akademik,
-                'verified' => $request->has('verified') ? 1 : 0,
-            ]);
-
-            // Simpan data Bimbingan ke dalam tabel bimbingans
-            Bimbingan::create([
-                'mhs_nim' => $mahasiswa->nim,
-                'mhs_nama' => $request->nama_mahasiswa,
-                'ta_id' => $tas->ta_id,
-                'dosen_nip' => $request->dosen_pembimbing_1,
-                'urutan' => 1, // Sesuaikan dengan urutan dosen pembimbing
-            ]);
-            Bimbingan::create([
-                'mhs_nim' => $mahasiswa->nim,
-                'mhs_nama' => $request->nama_mahasiswa,
-                'ta_id' => $tas->ta_id,
-                'dosen_nip' => $request->dosen_pembimbing_2,
-                'urutan' => 2, // Sesuaikan dengan urutan dosen pembimbing
-            ]);
-
-            // Beri pesan sukses
-            toastr()->success('Data Bimbingan berhasil ditambahkan.');
-            return redirect()->route('bimbingan.index');
-        } catch (\Throwable $th) {
-            // Jika terjadi kesalahan, beri pesan error dan kembalikan ke halaman sebelumnya
-            toastr()->error('Terjadi masalah pada server. Data Bimbingan gagal ditambahkan.');
-            return redirect()->route('bimbingan.index');
-        }
-    }
-
-
-
-
-    public function edit($ta_id)
-    {
-        $ta_mahasiswa = Bimbingan::findOrFail($ta_id);
-        $dosen = Dosen::all();
-        return view('bimbingan.edit', compact('ta_mahasiswa', 'dosen'));
-    }
-
-
-    public function update(Request $request, $ta_id)
-    {
         $validator = Validator::make($request->all(), [
-            'mhs_nim' => 'required|string',
-            'mhs_nama' => 'required|string',
-            'dosen_nama' => 'required|string',
-            'dosen_nama' => 'required|string',
-            'ta_judul' => 'required|string',
-            'verified' => 'nullable|string',
+            'dosen_pembimbing_1' => 'required',
+            'dosen_pembimbing_2' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -132,49 +56,155 @@ class BimbinganController extends Controller
                 ->withInput();
         }
 
-        try {
-            $bimbingan = Bimbingan::findOrFail($ta_id);
-            $bimbingan->update([
-                'mhs_nim' => $request->mhs_nim,
-                'mhs_nama' => $request->mhs_nama,
-                'dosen_nama' => $request->dosen_nama,
-                'dosen_nama' => $request->dosen_nama,
-                'ta_judul' => $request->ta_judul,
-                'verified' => $request->verified ? 1 : 0 // Menggunakan nilai 1 atau 0 berdasarkan pilihan verifikasi
-            ]);
+        $dosenPembimbing = [
+            $request->dosen_pembimbing_1,
+            $request->dosen_pembimbing_2
+        ];
 
-            toastr()->success('Data bimbingan berhasil disimpan');
+        if ($dosenPembimbing[0] == $dosenPembimbing[1]) {
+            toastr()->warning('Dosen Pembimbing Tidak Boleh Sama');
+            return redirect()->route('bimbingan.create');
+        }
+
+        $insert_ta = new Ta;
+        $insert_ta->fill($request->only(['mhs_nim', 'ta_judul', 'tahun_akademik']));
+        $insert_ta->draft_ta = null;
+        $insert_ta->verified = 0;
+        $insert_ta->save();
+        foreach ($dosenPembimbing as $index => $dosenNip) {
+            $insertDospem = new Bimbingan;
+            $insertDospem->dosen_nip = $dosenNip;
+            $insertDospem->ta_id = $insert_ta->ta_id;
+            $insertDospem->urutan = $index + 1;
+            $insertDospem->verified = $insert_ta->verified;
+            $insertDospem->save();
+        }
+        // dd($dosenPembimbing);
+
+        toastr()->success('Data Bimbingan berhasil ditambahkan.');
+        return redirect()->route('bimbingan.index');
+    }
+
+    public function edit($ta_id)
+    {
+        $ta_mahasiswa = Ta::findOrFail($ta_id);
+        // dd($ta_mahasiswa);
+        $dosen = Dosen::all();
+        $bimbingan = Bimbingan::where('ta_id', $ta_id)
+            ->orderBy('urutan')
+            ->get();
+        // dd($bimbingan);
+        $mhs = Bimbingan::mahasiswa();
+        return view('bimbingan.edit', compact('ta_mahasiswa', 'dosen', 'mhs', 'bimbingan'));
+    }
+
+
+
+    public function update(Request $request, $id)
+    {
+        // dd(new Bimbingan);
+        $validator = Validator::make($request->all(), [
+            'pembimbing_1' => 'required',
+            'pembimbing_2' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            toastr()->error('Data Bimbingan gagal diperbarui. Periksa kembali data Anda.');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $dosenPembimbing = [
+            $request->post('pembimbing_1'),
+            $request->post('pembimbing_2')
+        ];
+
+
+        if ($dosenPembimbing[0] == $dosenPembimbing[1]) {
+            toastr()->warning('Dosen Pembimbing Tidak Boleh Sama');
+            return redirect()->route('bimbingan.index');
+        }
+
+        try {
+            $update_ta = Ta::findOrFail($id);
+            $update_ta->mhs_nim = $request->post('mhs_nim');
+            $update_ta->ta_judul = $request->post('ta_judul');
+            $update_ta->tahun_akademik = $request->post('tahun_akademik');
+            $update_ta->update();
+
+            foreach ($dosenPembimbing as $index => $dosenNip) {
+                // Mencari entri Bimbingan yang sesuai dengan Ta yang sedang diperbarui
+                $updateDospem = Bimbingan::where('ta_id', $id)->where('urutan', $index + 1)->first();
+                if (!$updateDospem) {
+                    // Jika entri bimbingan tidak ditemukan, buat yang baru
+                    $updateDospem = new Bimbingan();
+                    $updateDospem->ta_id = $id;
+                    $updateDospem->urutan = $index + 1;
+                    $updateDospem->verified = 0;
+                }
+                $updateDospem->dosen_nip = $dosenNip;
+                $updateDospem->save();
+            }
+
+            toastr()->success('Data bimbingan berhasil diperbarui');
             return redirect()->route('bimbingan.index');
         } catch (\Throwable $th) {
-            toastr()->error('Terjadi masalah pada server. Data Bimbingan gagal diperbarui.');
+            toastr()->error('Terjadi masalah pada server. Data Bimbingan gagal diperbarui.' . $th->getMessage());
             return redirect()->route('bimbingan.index');
         }
     }
 
-    public function destroy($ta_id)
+
+    public function destroy($id)
     {
         try {
-            $bimbingan = Bimbingan::findOrFail($ta_id);
-            $bimbingan->delete();
+            // $deleted = DB::table('tas')->where('ta_id', '=', $id)->delete();
+            Ta::findOrFail($id)->delete();
+            Bimbingan::where('ta_id', $id)->where('urutan', 1)->firstOrFail()->delete();
+            Bimbingan::where('ta_id', $id)->where('urutan', 2)->firstOrFail()->delete();
             toastr()->success('Data Bimbingan berhasil dihapus.');
             return redirect()->route('bimbingan.index');
         } catch (\Throwable $th) {
-            toastr()->error('Terjadi masalah pada server. Data Bimbingan gagal dihapus.');
+            toastr()->error('Terjadi masalah pada server. Data Bimbingan gagal dihapus. Pesan Kesalahan: ' . $th->getMessage());
             return redirect()->route('bimbingan.index');
         }
     }
 
     public function verify(Request $request)
     {
-        $taId = $request->input('ta_id');
+        $taId = $request->input('data-id');
 
-        try {
-            $ta = Ta::findOrFail($taId);
-            $ta->update(['verified' => 1]);
+        Ta::where('ta_id', $taId)->update(['verified' => 1]);
+        Bimbingan::where('ta_id', $taId)->update(['verified' => 1]);
 
-            return response()->json(['success' => true]);
-        } catch (\Throwable $th) {
-            return response()->json(['success' => false]);
-        }
+        return redirect()->route('bimbingan.index')->with('success', 'Verifikasi berhasil.');
+
+        // try {
+        //     $ta = Ta::findOrFail($taId);
+        //     $ta->update(['verified' => 1]);
+
+        //     return response()->json(['success' => true]);
+        // } catch (\Throwable $th) {
+        //     return response()->json(['success' => false]);
+        // }
+    }
+
+    // Menampilkan form upload SK
+    public function show($ta_id)
+    {
+        // $ta_mahasiswa = Ta::findOrFail($ta_id);
+        $ta_mahasiswa = Ta::detailMahasiswa($ta_id);
+
+        // dd($ta_mahasiswa);
+        $bimbingans = Bimbingan::all();
+        $tas = Ta::all();
+
+        // Mengambil daftar nama dosen
+        $dosen = Dosen::all();
+        // $ta_mahasiswa = Bimbingan::ta_mahasiswa();
+        // dd($ta_mahasiswa);
+
+        return view('bimbingan.upload_sk', compact('bimbingans', 'dosen', 'ta_mahasiswa', 'tas'));
     }
 }
