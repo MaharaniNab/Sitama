@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class Bimbingan extends Model
+class BimbinganDosen extends Model
 {
     use HasFactory;
 
     protected $table = 'bimbingans'; // Nama tabel jika tidak mengikuti konvensi Laravel
     protected $primaryKey = 'bimbingan_id';
 
-    protected $fillable = ['dosen_nip', 'ta_id', 'urutan'];
+    protected $fillable = ['dosen_nip', 'ta_id', 'urutan', 'verified'];
     public $timestamps = false;
 
     // Metode untuk menghapus bimbingan berdasarkan ID
@@ -35,16 +36,13 @@ class Bimbingan extends Model
             ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
             ->leftJoin('bimbingans', 'bimbingans.ta_id', '=', 'tas.ta_id')
             ->leftJoin('dosen', 'dosen.dosen_nip', '=', 'bimbingans.dosen_nip')
-            ->leftJoin('kode_prodi', 'kode_prodi.prodi_ID', '=', 'mahasiswa.prodi_ID')
-            ->leftJoin('ta_sidang', 'ta_sidang.ta_id', '=', 'tas.ta_id')
             ->select(
                 'tas.ta_id',
                 'tas.ta_judul',
+                'tas.verified',
                 'tas.tahun_akademik',
                 'mahasiswa.mhs_nim',
                 'mahasiswa.mhs_nama',
-                'kode_prodi.program_studi',
-                'ta_sidang.judul_final',
                 DB::raw('GROUP_CONCAT(bimbingans.dosen_nip ORDER BY bimbingan_id) as dosen_nip'),
                 DB::raw('GROUP_CONCAT(dosen.dosen_nama ORDER BY bimbingan_id SEPARATOR "|") as dosen_nama'),
                 DB::raw('GROUP_CONCAT(bimbingans.bimbingan_id ORDER BY bimbingan_id) as bimbingan_id')
@@ -53,13 +51,11 @@ class Bimbingan extends Model
             ->groupBy(
                 'tas.ta_id',
                 'tas.ta_judul',
+                'tas.verified',
                 'tas.tahun_akademik',
                 'mahasiswa.mhs_nim',
-                'mahasiswa.mhs_nama',
-                'kode_prodi.program_studi',
-                'ta_sidang.judul_final'
+                'mahasiswa.mhs_nama'
             )
-
             ->get();
 
         $mahasiswa_comp = [];
@@ -92,36 +88,35 @@ class Bimbingan extends Model
 
     public static function ta_mahasiswa2()
     {
-    return DB::table('tas')
-        ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
-        ->leftJoin('bimbingans', 'bimbingans.ta_id', '=', 'tas.ta_id')
-        ->leftJoin('dosen', 'dosen.dosen_nip', '=', 'bimbingans.dosen_nip')
-        ->leftJoin('kode_prodi', 'kode_prodi.prodi_ID', '=', 'mahasiswa.prodi_ID')
-        ->leftJoin('ta_sidang', 'ta_sidang.ta_id', '=', 'tas.ta_id')
-        ->select(
-            'tas.ta_id',
-            'tas.ta_judul',
-            'tas.tahun_akademik',
-            'mahasiswa.mhs_nim',
-            'mahasiswa.mhs_nama',
-            'kode_prodi.program_studi',
-            'ta_sidang.judul_final',
-            DB::raw('GROUP_CONCAT(bimbingans.dosen_nip ORDER BY bimbingan_id) as dosen_nip'),
-            DB::raw('GROUP_CONCAT(dosen.dosen_nama ORDER BY bimbingan_id SEPARATOR "|") as dosen_nama'),
-            DB::raw('GROUP_CONCAT(bimbingans.bimbingan_id ORDER BY bimbingan_id) as bimbingan_id')
-        )
-        ->orderBy('mahasiswa.mhs_nim', 'asc')
-        ->groupBy(
-            'tas.ta_id',
-            'tas.ta_judul',
-            'tas.tahun_akademik',
-            'mahasiswa.mhs_nim',
-            'mahasiswa.mhs_nama',
-            'kode_prodi.program_studi',
-            'ta_sidang.judul_final'
-        );
-    }
+        $email = Auth::user()->email;
 
+        $ta_mahasiswa = DB::table('tas')
+            ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
+            ->leftJoin('bimbingans', 'bimbingans.ta_id', '=', 'tas.ta_id')
+            ->leftJoin('dosen', 'dosen.dosen_nip', '=', 'bimbingans.dosen_nip')
+            ->select(
+                'tas.ta_id',
+                'tas.ta_judul',
+                'tas.verified',
+                'tas.tahun_akademik',
+                'mahasiswa.mhs_nim',
+                'mahasiswa.mhs_nama',
+                DB::raw('GROUP_CONCAT(bimbingans.dosen_nip ORDER BY bimbingan_id) as dosen_nip'),
+                DB::raw('GROUP_CONCAT(dosen.dosen_nama ORDER BY bimbingan_id SEPARATOR "|") as dosen_nama'),
+                DB::raw('GROUP_CONCAT(bimbingans.bimbingan_id ORDER BY bimbingan_id) as bimbingan_id')
+            )
+            ->orderBy('mahasiswa.mhs_nim', 'asc')
+            ->groupBy(
+                'tas.ta_id',
+                'tas.ta_judul',
+                'tas.verified',
+                'tas.tahun_akademik',
+                'mahasiswa.mhs_nim',
+                'mahasiswa.mhs_nama'
+            )
+            ->where('dosen.email',$email );
+        return $ta_mahasiswa;
+    }
 
     public static function mahasiswa()
     {

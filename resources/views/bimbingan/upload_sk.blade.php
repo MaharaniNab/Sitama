@@ -1,145 +1,161 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Detail Persyaratan</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('bimbingan.index') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Detail Persyaratan</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <h5 class="card-title m-0">Detail Persyaratan</h5>
-                        <div class="card-tools">
-                            <a href="{{ route('bimbingan.index') }}" class="btn btn-tool"><i class="fas fa-arrow-left"></i></a>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h5 class="card-title m-0">Detail Persyaratan</h5>
+                            <div class="card-tools">
+                                <a href="{{ route('bimbingan.index') }}" class="btn btn-tool"><i class="fas fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col col-md-4">
+                                    <p class="font-weight-bold">NIM</p>
+                                </div>
+                                <div class="col">
+                                    <p>: {{ $ta_mahasiswa->mhs_nim }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-4">
+                                    <p class="font-weight-bold">Nama Mahasiswa</p>
+                                </div>
+                                <div class="col">
+                                    <p>: {{ $ta_mahasiswa->mhs_nama }}</p>
+                                </div>
+                            </div>
+                            @foreach ($ta_mahasiswa->dosen as $pembimbing)
+                                <div class="row">
+                                    <div class="col col-md-4">
+                                        <p class="font-weight-bold">Dosen Pembimbing {{ $loop->iteration }}</p>
+                                    </div>
+                                    <div class="col">
+                                        <p>: {{ $pembimbing['dosen_nama'] }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                            <div class="row">
+                                <div class="col col-md-4">
+                                    <p class="font-weight-bold">Tahun Akademik</p>
+                                </div>
+                                <div class="col">
+                                    <p>: {{ $ta_mahasiswa->tahun_akademik }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-4">
+                                    <p class="font-weight-bold">Judul TA</p>
+                                </div>
+                                <div class="col">
+                                    <p>: {{ isset($ta_mahasiswa->judul_final) ? $ta_mahasiswa->judul_final : 'Data tidak tersedia' }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <form action="{{ route('bimbingan.store') }}" method="post">
-                            @csrf
-                            <div class="form-group row">
-                                <label for="nim" class="col-sm-2 col-form-label">NIM</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="nim" name="nim" class="form-control" placeholder="Masukkan NIM" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="mahasiswa" class="col-sm-2 col-form-label">Mahasiswa</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="mahasiswa" name="mahasiswa" class="form-control" placeholder="Masukkan nama mahasiswa" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="dosen_pembimbing_1" class="col-sm-2 col-form-label">Dosen Pembimbing 1</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="dosen_pembimbing_1" name="dosen_pembimbing_1" class="form-control" placeholder="Masukkan Dosen Pembimbing 1" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="dosen_pembimbing_2" class="col-sm-2 col-form-label">Dosen Pembimbing 2</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="dosen_pembimbing_2" name="dosen_pembimbing_2" class="form-control" placeholder="Masukkan Dosen Pembimbing 2" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="tahun_akademik" class="col-sm-2 col-form-label">Tahun Akademik</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="tahun_akademik" name="tahun_akademik" class="form-control" placeholder="Masukkan Tahun Akademik" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="judul_ta" class="col-sm-2 col-form-label">Judul TA</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="judul_ta" name="judul_ta" class="form-control" placeholder="Masukkan Judul TA" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="keterangan" class="col-sm-2 col-form-label">Keterangan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" id="keterangan" name="keterangan" class="form-control" placeholder="Masukkan Keterangan" style="border-bottom-width: 1px;">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    <h2>Syarat Ujian TA</h2>
-                                    <table class="table table-bordered">
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h5 class="m-0">
+                                Syarat Ujian TA
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col table-responsive">
+                                    <table class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
                                                 <th scope="col">Syarat</th>
+                                                <th scope="col">File</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col">aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Surat Keterangan PKL</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Surat Keterangan KKL</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Sertifikat TOEFL</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Lembar Kontrol Bimbingan</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Surat Keterangan Selesai Bimbingan</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Form Siap TA</td>
-                                                <td>Belum Diperiksa</td>
-                                                <td></td>
-                                            </tr>
+                                            @foreach ($syarat as $s)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $s->dokumen_syarat }}</td>
+                                                    <td>
+                                                        @if (!isset($s->dokumen_nama))
+                                                            -
+                                                        @else
+                                                            <a href="{{ asset('storage/syarat_ta/' . $s->dokumen_nama) }}">{{ $s->dokumen_nama }}</a>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (!isset($s->dokumen_nama))
+                                                        <span class="badge badge-danger">Belum Diupload</span>
+                                                        @elseif ($s->verified == 0)
+                                                            <form action="{{ route('bimbingan.verify', $s->syarat_sidang_id) }}" method="POST" class="d-inline verify-form">
+                                                                @csrf
+                                                                <input type="hidden" name="verified" value="1">
+                                                                <button type="submit" class="btn btn-primary verifikasi">Verifikasi</button>
+                                                            </form>
+                                                            <span class="not-verified"></span>
+                                                        @else
+                                                            <span class="badge badge-success">Verified</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-info btn-block btn-flat"><i class="fa fa-save"></i> Simpan</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('js')
-<script>
-    // tambahkan script JS jika diperlukan
-</script>
+    <!-- Tambahkan script JavaScript jika diperlukan -->
+    <script>
+        $('.verifikasi').click(function(event) {
+            var form = $(this).closest("form");
+            var notVerifiedSpan = $(this).closest('td').find('.not-verified');
+            var button = $(this);
+            event.preventDefault();
+            swal({
+                title: `Verifikasi Data`,
+                icon: "warning",
+                buttons: {
+                    confirm: {
+                        text: 'Ya'
+                    },
+                    cancel: 'Tidak'
+                },
+                dangerMode: true,
+            }).then((willVerify) => {
+                if (willVerify) {
+                    form.find('input[name="verified"]').val(1);
+                    form.submit();
+                } else {
+                    form.find('input[name="verified"]').val(2);
+                    $.ajax({
+                        type: 'POST',
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            notVerifiedSpan.html('<span class="badge badge-danger">Not Verified</span>');
+                            button.hide();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 @endpush
