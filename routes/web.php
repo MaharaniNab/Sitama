@@ -12,7 +12,6 @@ use App\Http\Controllers\TaController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\tasidang;
 use App\Http\Controllers\UjianSidangController;
-use App\Http\Controllers\TaRoleDosenController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -73,8 +72,5 @@ Route::post('/setujui-sidang-akhir/{ta_id}', [MahasiswaBimbinganController::clas
 Route::post('/setujui-pembimbingan/{ta_id}', [MahasiswaBimbinganController::class, 'setujuiPembimbingan'])->name('setujui-pembimbingan');
 Route::get('/mhsbimbingan/{ta_id}', [MahasiswaBimbinganController::class, 'pembimbingan'])->name('mhsbimbingan.pembimbingan');
 Route::resource('mhsbimbingan', MahasiswaBimbinganController::class);
-
-Route::get('/ta', [TaRoleDosenController::class, 'index'])->name('ta');
-Route::resource('ta', TaRoleDosenController::class);
 
 Route::get('dbbackup', [DBBackupController::class, 'DBDataBackup']);
