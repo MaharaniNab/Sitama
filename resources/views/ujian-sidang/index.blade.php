@@ -114,13 +114,13 @@
                                             @endif
                                     </td>
                                     <td class="text-center">
-                                        @if ($item->status_lulus == 0)
-                                        <span class="badge badge-warning">Belum melaksanakan sidang</span>
-                                        @elseif ($item->status_lulus == 1)
+                                        @if ($item->status_lulus == NULL)
+                                        -
+                                        @elseif ($item->status_lulus == 0)
                                         <h6><span class="badge badge-success">Lulus</span></h6>
-                                        @elseif ($item->status_lulus == 2)
+                                        @elseif ($item->status_lulus == 1)
                                         <h6><span class="badge badge-warning">Lulus dengan revisi</span></h6>
-                                        @elseif ($item->status_lulus == 3)
+                                        @elseif ($item->status_lulus == 2)
                                         <h6><span class="badge badge-danger">Tidak lulus</span></h6>
                                         @endif
                                     </td>
@@ -140,24 +140,26 @@
                                                 <a class="dropdown-item" href="{{ route('ujian-sidang.kelayakan', ['ta_id' => $item->ta_id]) }}" data-toggle="tooltip" data-placement="top" title="Input Kelayakan Ujian Sidang">
                                                     <i class="fas fa-edit"></i> Input Nilai
                                                 </a>
+                                                @if ($item->status_lulus != NULL)
                                                 <a class="dropdown-item" href="{{ route('ujian-sidang.revisi', ['ta_id' => $item->ta_id]) }}" data-toggle="tooltip" data-placement="top" title="Lihat Revisi">
                                                     <i class="fas fa-eye"></i> Lihat Revisi
                                                 </a>
+                                                @endif
                                                 @elseif ($isPenguji)
                                                 <a class="dropdown-item" href="{{ route('ujian-sidang.penguji', ['ta_id' => $item->ta_id]) }}" data-toggle="tooltip" data-placement="top" title="Input Nilai Penguji">
                                                     <i class="fas fa-edit"></i> Input Nilai
                                                 </a>
+                                                @if ($item->status_lulus != NULL)
                                                 <a class="dropdown-item" href="{{ route('ujian-sidang.revisi2', ['ta_id' => $item->ta_id]) }}" data-toggle="tooltip" data-placement="top" title="Lihat Revisi">
                                                     <i class="fas fa-eye"></i> Lihat Revisi
                                                 </a>
+                                                @endif
                                                 @endif
 
                                             </div>
                                         </div>
                                         @endif
                                     </td>
-
-
                                 </tr>
                                 @endforeach
                             </tbody>
