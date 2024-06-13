@@ -1,14 +1,11 @@
-# **SITAMA BAGIAN ADMIN DAN DOSEN**
-<br>
-
 <p align="center">
 <a href="https://laravel.com"  target="_blank"><img  src="https://ik.polines.ac.id/wp-content/uploads/2023/11/logo-web.png"  width="360"  alt="Laravel Logo"></a> 
 <a  href="https://laravel.com"  target="_blank"><img  src="https://ik.polines.ac.id/wp-content/uploads/2024/02/laravel-logo.jpg"  width="220"  alt="Laravel Logo"></a>
 </p>  
 
-# PBL Template D3 Teknik Informatika & S.Tr. Teknologi Rekayasa Komputer
+# PBL D3 Teknik Informatika SITAMA (Sistem Informasi Tugas Akhir dan Magang) Bagian Admin dan Dosen
 
-Repository ini digunakan sebagai template aplikasi dasar yang akan digunakan untuk pelaksanaan <i><b>Project-Based Learning</b></i> pada kedua prodi di atas di Jurusan Teknik Elektro, Politeknik Negeri Semarang.
+Repository ini digunakan sebagai aplikasi yang akan digunakan untuk pelaksanaan <i><b>Project-Based Learning</b></i> pada prodi Teknik Informatika dan Teknologi Rekayasa Komputer di Jurusan Teknik Elektro, Politeknik Negeri Semarang.
 
 <i>Minimum requirements</i> untuk menjalankan template ini adalah:
 - PHP 8.1
@@ -18,7 +15,7 @@ Repository ini digunakan sebagai template aplikasi dasar yang akan digunakan unt
 Cara menggunakan template ini adalah sebagai berikut:
 1. Dengan menggunakan ``terminal`` atau ``command prompt``, duplikasi template ini menggunakan perintah:
 ```
-git clone https://gitlab.com/sukotyasp/pbl-laravel-template.git {project-directory}
+git clone (https://github.com/MaharaniNab/Sitama.git) {project-directory}
 ```
 2. Masuk ke ``{project-directory}``, hapus folder **hidden** bernama `` .git``.
 3. Alternatif selain melakukan langkah 1. dan 2., anda dapat mengunduh versi terbaru yang dipublikasikan pada link <a href='https://gitlab.com/sukotyasp/pbl-laravel-template/-/tags?sort=version_desc'>berikut</a>. Kemudian ``extract`` file yang anda unduh. Buka ``terminal`` atau ``command prompt``, lalu pilih folder hasil ekstrak sebagai folder aktif pada command line.
